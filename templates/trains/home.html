@@ -23,9 +23,9 @@
                             <th>{{ train.from_city }}</th>
                             <th>{{ train.to_city }}</th>
                             <th>{{ train.travel_time }} ч.</th>
-                            <td><a class="btn btn-success btn-sm" href=""
+                            <td><a class="btn btn-success btn-sm" href="{% url 'trains:update' pk=train.pk %}"
                                    role="button">Редактировать</a></td>
-                            <td><a class="btn btn-danger btn-sm" href=""
+                            <td><a class="btn btn-danger btn-sm" href="{% url 'trains:delete' pk=train.pk %}"
                                    role="button">Удалить</a></td>
                         </tr>
                     {% endfor %}

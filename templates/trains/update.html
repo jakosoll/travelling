@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container my-4">
+        <h1 class="display-4">Отредактировать поезд</h1>
+        <div class="row mx-auto my-4">
+            <div class="col-md-4">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn btn-light" type="submit" role="button" value="Сохранить">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 
 from .forms import TrainForm
 from .models import Train
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
 class TrainListView(ListView):
@@ -24,3 +24,17 @@ class TrainCreateView(SuccessMessageMixin, CreateView):
     template_name = 'trains/create.html'
     success_url = reverse_lazy('trains:home')
     success_message = 'Поезд успешно создан'
+
+
+class TrainUpdateView(SuccessMessageMixin, UpdateView):
+    model = Train
+    form_class = TrainForm
+    template_name = 'trains/update.html'
+    success_url = reverse_lazy('trains:home')
+    success_message = 'Поезд успешно отредактирован'
+
+
+class TrainDeleteView(DeleteView):
+    model = Train
+    template_name = 'trains/delete.html'
+    success_url = reverse_lazy('trains:home')
