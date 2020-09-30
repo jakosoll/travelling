@@ -7,7 +7,7 @@ class CityForm(forms.ModelForm):
                            widget=forms.TextInput(
                                attrs={
                                    'class': 'form-control',
-                                   'placeholder': 'Название города'
+                                   'placeholder': ' Введите название города'
                                }))
 
     class Meta:
