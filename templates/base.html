@@ -38,7 +38,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{% url 'cities:add' %}">Добавить город</a>
-                        <a class="dropdown-item" href="#">Добавить поезд</a>
+                        <a class="dropdown-item" href="{% url 'trains:add' %}">Добавить поезд</a>
                         <a class="dropdown-item" href="#">Добавить маршрут</a>
                     </div>
                 </li>
@@ -48,7 +48,7 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 mx-auto">
+        <div class="col-md-8 mx-auto my-2">
             {% if messages %}
                 {% for message in messages %}
                     {% if message.level == DEFAULT.MESSAGE.LEVELS.ERROR %}

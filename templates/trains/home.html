@@ -4,7 +4,7 @@
     <div class="container my-4">
         <h1 class="text-center my-4">Список поездов</h1>
         <div class="row">
-            <div class="col-md-6 mx-auto">
+            <div class="col-md-8 mx-auto">
                 <table class="table">
                     <thead class="thead-dark rounded">
                     <tr>
@@ -12,6 +12,8 @@
                         <th scope="col">Откуда</th>
                         <th scope="col">Куда</th>
                         <th scope="col">Время в пути</th>
+                        <th scope="col">&nbsp;</th>
+                        <th scope="col">&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -21,6 +23,10 @@
                             <th>{{ train.from_city }}</th>
                             <th>{{ train.to_city }}</th>
                             <th>{{ train.travel_time }} ч.</th>
+                            <td><a class="btn btn-success btn-sm" href=""
+                                   role="button">Редактировать</a></td>
+                            <td><a class="btn btn-danger btn-sm" href=""
+                                   role="button">Удалить</a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
