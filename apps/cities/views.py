@@ -1,7 +1,6 @@
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from django.core.paginator import Paginator
 from apps.cities.forms import CityForm
 from apps.cities.models import City
 
@@ -39,4 +38,4 @@ class CityDeleteView(SuccessMessageMixin, DeleteView):
     form_class = CityForm
     template_name = 'cities/delete.html'
     success_url = reverse_lazy('cities:home')
-    success_message = 'Город удален'
+
