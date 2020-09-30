@@ -16,6 +16,7 @@ class TrainListView(ListView):
 class TrainDetailView(DetailView):
     queryset = Train.objects.all()
     template_name = 'trains/detail.html'
+    context_object_name = 'train'
 
 
 class TrainCreateView(SuccessMessageMixin, CreateView):

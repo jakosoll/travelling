@@ -27,6 +27,7 @@
                 </table>
             </div>
         </div>
+        {% if page_obj.paginator.num_pages  != 1 %}
         <div class="row">
             <div class="col-md-6 mx-auto">
                 <nav aria-label="Page navigation">
@@ -52,5 +53,6 @@
                 </nav>
             </div>
         </div>
+        {% endif %}
     </div>
 {% endblock %}

@@ -1,16 +1,44 @@
 {% extends 'base.html' %}
-{% block title %}Город {{ object.name }}{% endblock title %}
+{% block title %}Поезд {{ object.name }}{% endblock title %}
 {% block content %}
     <div class="container my-4">
+    <h1 class="text-center my-4">Обзор поезда</h1>
        <div class="row">
-            <p>Вы просматриваете поезд: <strong> {{ object.name }}</strong></p>
+            <div class="col-md-10 mx-auto">
+                <table class="table">
+                    <thead class="thead-dark rounded">
+                    <tr>
+                        <th scope="col">Название поезда</th>
+                        <th scope="col">Откуда</th>
+                        <th scope="col">Куда</th>
+                        <th scope="col">Время в пути</th>
+                        <th scope="col">&nbsp;</th>
+                        <th scope="col">&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">{{ train.name }}</th>
+                            <th>{{ train.from_city }}</th>
+                            <th>{{ train.to_city }}</th>
+                            <th>{{ train.travel_time }} ч.</th>
+                            <td><a class="btn btn-success btn-sm" href="{% url 'trains:update' pk=train.pk %}"
+                                   role="button">Редактировать</a></td>
+                            <td><a class="btn btn-danger btn-sm" href="{% url 'trains:delete' pk=train.pk %}"
+                                   role="button">Удалить</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
        </div>
         <div class="row">
-            <a href="{% url 'cities:home' %}">
-                <button type="button" class="btn btn-light">
-                    К списку городов
-                </button>
-            </a>
+            <div class="col-md-10 mx-auto">
+                <a href="{% url 'trains:home' %}">
+                    <button type="button" class="btn btn-light">
+                        К списку поездов
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 {% endblock %}
