@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from .forms import RouteForm
 
 
-def index(request):
-    return render(request, 'routes/index.html')
+def home(request):
+    form = RouteForm()
+    return render(request, 'routes/home.html', {'form': form})
