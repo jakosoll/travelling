@@ -3,9 +3,37 @@
 {% block content %}
     <div class="container my-4">
         <h1 class="display-4 text-center">Поиск маршрута</h1>
+        {% if routes %}
+            <div class="row mx-auto my-4">
+                <div class="col-md-6 mx-auto">
+                    <h3 class="text-center">Маршруты из {{ cities.from_city }} в {{ cities.to_city }}</h3>
+                {% for route in routes %}
+                    {% if forloop.first %}
+                        <h5 class="text-center my-4">Самый короткий маршрут: {{ route.total_time }} ч.</h5>
+                    {% endif %}
+                    <table class="table my-4">
+                        <thead class="thead-dark rounded">
+                            <tr>
+                                <th scope="col">Список поездов</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for train in route.route %}
+                            <tr>
+                                <th>Поезд № {{ train.name }}, следующий из {{ train.from_city }} в {{ train.to_city }}.
+                                    Время в пути {{ train.travel_time }} ч.</th>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <p><strong>Время в пути {{ route.total_time }} ч.</strong></p>
+                {% endfor %}
+                </div>
+            </div>
+        {% endif %}
         <div class="row mx-auto my-4">
             <div class="col-md-6 mx-auto">
-                <form action="" method="post">
+                <form action="{% url 'routes:find' %}" method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <input class="btn btn-light" type="submit" role="button" value="Найти">
