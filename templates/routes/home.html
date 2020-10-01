@@ -5,9 +5,18 @@
         <h1 class="display-4 text-center">Поиск маршрута</h1>
         {% if routes %}
             <div class="row mx-auto my-4">
-                <div class="col-md-6 mx-auto">
-                    <h3 class="text-center">Маршруты из {{ cities.from_city }} в {{ cities.to_city }}</h3>
+                <div class="col-md-8 mx-auto">
+                    <h3 class="text-center">
+                        {% if routes|length == 1 %}Маршрут{% else %}Маршруты{% endif %}
+                         из г. {{ cities.from_city }} в г. {{ cities.to_city }}</h3>
                 {% for route in routes %}
+                    <form action="" method="get" >
+                        <input type="hidden" name="from_city" value="{{ route.from_city }}">
+                        <input type="hidden" name="to_city" value="{{ route.to_city }}">
+                        <input type="hidden" name="total_time" value="{{ route.total_time }}">
+                        <input type="hidden" name="across_cities"
+                               value="{% for train in route.route %}{{ train.id }} {% endfor %}">
+
                     {% if forloop.first %}
                         <h5 class="text-center my-4">Самый короткий маршрут: {{ route.total_time }} ч.</h5>
                     {% endif %}
@@ -20,13 +29,15 @@
                         <tbody>
                         {% for train in route.route %}
                             <tr>
-                                <th>Поезд № {{ train.name }}, следующий из {{ train.from_city }} в {{ train.to_city }}.
+                                <th>Поезд № <strong>{{ train.name }}</strong>, следующий из г. {{ train.from_city }} в г. {{ train.to_city }}.
                                     Время в пути {{ train.travel_time }} ч.</th>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                     <p><strong>Время в пути {{ route.total_time }} ч.</strong></p>
+                        <button type="submit" class="btn btn-success btn-sm">Сохранить маршрут</button>
+                    </form>
                 {% endfor %}
                 </div>
             </div>
