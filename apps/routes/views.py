@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.contrib import messages
-from .forms import RouteForm
+from .forms import RouteForm, RouteCreateForm
 from ..trains.models import Train
+from typing import List
 
 
 def dfs_paths(graph, start, goal):
@@ -96,3 +97,33 @@ def find_routes(request):
         messages.error(request, 'Создайте маршрут')
         form = RouteForm()
         return render(request, 'routes/home.html', {'form': form})
+
+
+def create_route(request):
+    if request.method == 'POST':
+        pass
+    else:
+        data = request.GET
+        total_time = data['total_time']
+        from_city: str = data['from_city']
+        to_city: str = data['to_city']
+        across_cities: List[str] = data['across_cities'].split()
+        trains_id = [int(i) for i in across_cities if i.isalnum()]
+        qs = Train.objects.filter(id__in=trains_id)
+        train_list = ' '.join(str(i) for i in trains_id)
+        form = RouteCreateForm(initial={'from_city': from_city,
+                                        'to_city': to_city,
+                                        'travel_time': total_time,
+                                        'across_cities': train_list
+                                        })
+        route_desc = []
+        for train in qs:
+            desc = f'Поезд № {train.name} следующий из г. {train.from_city} в г. {train.to_city}. ' \
+                    f'Время в пути {train.travel_time} ч.'
+            route_desc.append(desc)
+        context = {'form': form,
+                   'route_desc': route_desc,
+                   'from_city': from_city,
+                   'to_city': to_city,
+                   'total_time': total_time}
+    return render(request, 'routes/create.html', context)
