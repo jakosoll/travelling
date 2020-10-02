@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container my-4">
+        <h1 class="display-4">Сохранить маршрут</h1>
+        <div class="row mx-auto my-4">
+            <div class="col-md-8">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <p>Маршрут из г. {{ from_city }} в г. {{ to_city }} продолжительностью {{ total_time }} ч.</p>
+                    <p>Маршрут состоит из:</p>
+                    {% for d in route_desc %}
+                        <p>{{ d }}</p>
+                    {% endfor %}
+
+                    <input class="btn btn-light" type="submit" role="button" value="Сохранить">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

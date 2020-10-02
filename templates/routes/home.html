@@ -10,7 +10,7 @@
                         {% if routes|length == 1 %}Маршрут{% else %}Маршруты{% endif %}
                          из г. {{ cities.from_city }} в г. {{ cities.to_city }}</h3>
                 {% for route in routes %}
-                    <form action="" method="get" >
+                    <form action="{% url 'routes:save_route' %}" method="get" >
                         <input type="hidden" name="from_city" value="{{ route.from_city }}">
                         <input type="hidden" name="to_city" value="{{ route.to_city }}">
                         <input type="hidden" name="total_time" value="{{ route.total_time }}">
