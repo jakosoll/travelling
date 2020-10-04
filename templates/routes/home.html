@@ -10,12 +10,15 @@
                         {% if routes|length == 1 %}Маршрут{% else %}Маршруты{% endif %}
                          из г. {{ cities.from_city }} в г. {{ cities.to_city }}</h3>
                 {% for route in routes %}
+                    <form action="" method="get" >
+                        <input type="hidden" name="from_city" value="{{ route.from_city.name }}">
+                        <input type="hidden" name="to_city" value="{{ route.to_city.name }}">
                     <form action="{% url 'routes:save_route' %}" method="get" >
                         <input type="hidden" name="from_city" value="{{ route.from_city }}">
                         <input type="hidden" name="to_city" value="{{ route.to_city }}">
                         <input type="hidden" name="total_time" value="{{ route.total_time }}">
                         <input type="hidden" name="across_cities"
-                               value="{% for train in route.route %}{{ train.id }} {% endfor %}">
+                               value="{% for train in route.trains %}{{ train.id }} {% endfor %}">
 
                     {% if forloop.first %}
                         <h5 class="text-center my-4">Самый короткий маршрут: {{ route.total_time }} ч.</h5>
@@ -27,9 +30,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% for train in route.route %}
+                        {% for train in route.trains %}
                             <tr>
-                                <th>Поезд № <strong>{{ train.name }}</strong>, следующий из г. {{ train.from_city }} в г. {{ train.to_city }}.
+                                <th>Поезд № <strong>{{ train.name }}</strong>, следующий из г. {{ train.from_city.name }} в г. {{ train.to_city.name }}.
                                     Время в пути {{ train.travel_time }} ч.</th>
                             </tr>
                         {% endfor %}
