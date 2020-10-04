@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, DeleteView
 from .graph import get_graph, dfs_paths
 from .forms import RouteForm, RouteCreateForm
-from .models import Route
+from .route import SessionRoute
 from ..trains.models import Train
 from typing import List
 
@@ -52,22 +52,18 @@ def find_routes(request):
                     tmp['trains'].append(qs)
                 tmp['total_time'] = total_time
                 if total_time <= int(travel_time):
+                    tmp['from_city'] = from_city
+                    tmp['to_city'] = to_city
                     trains.append(tmp)
             if not trains:
                 messages.error(request, 'Время в пути больше заданного')
                 return render(request, 'routes/home.html', {'form': form})
+            trains = sorted(trains, key=lambda x:x['total_time'])
+            routes = SessionRoute(request)
+            routes.add(trains)
 
-            routes = []
             cities = {'from_city': from_city.name, 'to_city': to_city.name}  # города, будем рендерить в шаблоне
-            for train in trains:
-                routes.append({
-                    'route': train['trains'],
-                    'total_time': train['total_time'],
-                    'from_city': from_city.name,
-                    'to_city': to_city.name
-                })
-            sorted_routes = sorted(routes, key=lambda x: x['total_time'])
-            context = {'form': RouteForm(), 'routes': sorted_routes, 'cities': cities}
+            context = {'form': RouteForm(), 'routes': routes, 'cities': cities}
             return render(request, 'routes/home.html', context)
         return render(request, 'routes/home.html', {'form': form})
     else:
