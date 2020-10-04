@@ -60,6 +60,7 @@ def find_routes(request):
                 return render(request, 'routes/home.html', {'form': form})
             trains = sorted(trains, key=lambda x:x['total_time'])
             routes = SessionRoute(request)
+            routes.clear()  # очищаем сессию перед новым добавлением
             routes.add(trains)
 
             cities = {'from_city': from_city.name, 'to_city': to_city.name}  # города, будем рендерить в шаблоне
@@ -72,8 +73,7 @@ def find_routes(request):
         return render(request, 'routes/home.html', {'form': form})
 
 
-def save_route(request):
-    """Сохранение маршрута в модели"""
+def create_route(request, route_id):
     if request.method == 'POST':
         form = RouteCreateForm(request.POST)
         if form.is_valid():
