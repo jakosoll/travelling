@@ -14,7 +14,6 @@ class SessionRoute:
         self.count = 0
 
     def add(self, routes):
-
         for route in routes:
             self.count += 1
             trains_id = []
@@ -26,7 +25,6 @@ class SessionRoute:
                 'trains': trains_id,
                 'total_time': route['total_time']
             }
-        print(self.routes)
         self.save()
 
     def sorted(self):
@@ -34,11 +32,12 @@ class SessionRoute:
 
     def __iter__(self):
         routes = copy.deepcopy(self.routes)
-        for route in routes.values():
+        for key, route in routes.items():
             trains_id = [i for i in route['trains']]
             from_city_id = route['from_city']
             to_city_id = route['to_city']
             trains = Train.objects.filter(id__in=trains_id)
+            route['id'] = int(key)
             route['trains'] = [train for train in trains]
             route['from_city'] = City.objects.get(pk=from_city_id)
             route['to_city'] = City.objects.get(pk=to_city_id)
@@ -47,6 +46,10 @@ class SessionRoute:
 
     def __len__(self):
         return len(self.routes.values())
+
+    def clear(self):
+        del self.session[settings.ROUTE_SESSION_ID]
+        self.session.modified = True
 
     def save(self):
         """Сохранение корзины в сессии"""
