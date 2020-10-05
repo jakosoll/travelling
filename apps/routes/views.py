@@ -120,3 +120,4 @@ class RouteListView(ListView):
 class RouteDeleteView(DeleteView):
     model = Route
     success_url = reverse_lazy('routes:home')
+
