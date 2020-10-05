@@ -46,7 +46,6 @@ class SessionRoute:
             route['trains'] = [train for train in trains]
             route['from_city'] = City.objects.get(pk=from_city_id)
             route['to_city'] = City.objects.get(pk=to_city_id)
-            print(route)
             yield route
 
     def __len__(self):
