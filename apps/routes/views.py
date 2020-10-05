@@ -1,6 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, DeleteView
 from .graph import get_graph, dfs_paths
@@ -117,7 +119,8 @@ class RouteListView(ListView):
     template_name = 'routes/list.html'
 
 
-class RouteDeleteView(DeleteView):
+class RouteDeleteView(LoginRequiredMixin, DeleteView):
     model = Route
+    login_url = '/login/'
     success_url = reverse_lazy('routes:home')
 

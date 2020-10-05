@@ -12,8 +12,8 @@
                         <th scope="col">Откуда</th>
                         <th scope="col">Куда</th>
                         <th scope="col">Время в пути</th>
-                        <th scope="col">&nbsp;</th>
-                        <th scope="col">&nbsp;</th>
+
+
                     </tr>
                     </thead>
                     <tbody>
@@ -23,8 +23,6 @@
                             <th>{{ route.from_city }}</th>
                             <th>{{ route.to_city }}</th>
                             <th>{{ route.travel_time }} ч.</th>
-                            <td><a class="btn btn-danger btn-sm" href="{% url 'routes:delete' pk=route.pk %}"
-                                   role="button">Удалить</a></td>
                         </tr>
                     {% endfor %}
                     </tbody>

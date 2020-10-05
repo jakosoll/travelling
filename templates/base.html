@@ -1,6 +1,7 @@
 {% url 'cities:home' as cities_home %}
 {% url 'trains:home' as trains_home %}
 {% url 'routes:list' as routes_list %}
+{% url 'login' as login %}
 <!doctype html>
 <html lang="ru">
 <head>
@@ -23,6 +24,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">@{{ user.username }}, выйти</a></li>
+                {% else %}
+                    <li class="nav-item {% if request.path == login %} active {% endif %}"><span class="nav-link">Войти</span></li>
+                {% endif %}
                 <li class="nav-item {% if request.path == routes_list %} active {% endif %}">
                     <a class="nav-link" href="{% url 'routes:list' %}">Маршруты</a>
                 </li>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container my-4">
+        <h1 class="display-4 text-center">Страница входа</h1>
+        <div class="row my-4">
+            <div class="col-md-4 mx-auto">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn btn-light" type="submit" role="button" value="Войти">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
