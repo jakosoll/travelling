@@ -7,10 +7,11 @@
                 <form action="" method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <p>Маршрут из г. {{ from_city }} в г. {{ to_city }} продолжительностью {{ total_time }} ч.</p>
+                    <p>Маршрут из г. {{ route.from_city }} в г. {{ route.to_city }} продолжительностью {{ route.total_time }} ч.</p>
                     <p>Маршрут состоит из:</p>
-                    {% for d in route_desc %}
-                        <p>{{ d }}</p>
+                    {% for train in route.trains %}
+                        <p>Поезд № {{ train.name }} следующий из г. {{ train.from_city }} в г. {{ train.to_city }}.
+                        Время в пути {{ train.travel_time }} ч.</p>
                     {% endfor %}
 
                     <input class="btn btn-light" type="submit" role="button" value="Сохранить">

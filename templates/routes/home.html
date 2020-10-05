@@ -29,7 +29,7 @@
                         </tbody>
                     </table>
                     <p><strong>Время в пути {{ route.total_time }} ч.</strong></p>
-                        <button type="submit" class="btn btn-success btn-sm">Сохранить маршрут</button>
+                        <a role="button" class="btn btn-success btn-sm" href="{% url 'routes:save_route' route_id=route.id %}">Сохранить маршрут</a>
                 {% endfor %}
                 </div>
             </div>

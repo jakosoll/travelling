@@ -1,7 +1,5 @@
-from typing import List, Dict, Union
 import copy
 from django.conf import settings
-from django.forms.models import model_to_dict
 from apps.cities.models import City
 from apps.trains.models import Train
 
@@ -9,7 +7,9 @@ from apps.trains.models import Train
 class SessionRoute:
     def __init__(self, request):
         self.session = request.session
-        routes = self.session[settings.ROUTE_SESSION_ID] = {}
+        routes = self.session.get(settings.ROUTE_SESSION_ID)
+        if not routes:
+            routes = self.session[settings.ROUTE_SESSION_ID] = {}
         self.routes = routes
         self.count = 0
 
@@ -27,8 +27,13 @@ class SessionRoute:
             }
         self.save()
 
-    def sorted(self):
-        self.routes = sorted(self.routes, key=lambda x: x['total_time'])
+    def get_route(self, route_id):
+        route = copy.deepcopy(self.routes.get(str(route_id)))
+        route['from_city'] = City.objects.get(pk=route['from_city'])
+        route['to_city'] = City.objects.get(pk=route['to_city'])
+        route['trains'] = Train.objects.filter(id__in=route['trains'])
+        route['id'] = route_id
+        return route
 
     def __iter__(self):
         routes = copy.deepcopy(self.routes)
