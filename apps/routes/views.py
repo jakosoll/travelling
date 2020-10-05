@@ -6,8 +6,8 @@ from django.views.generic import DetailView, ListView, DeleteView
 from .graph import get_graph, dfs_paths
 from .forms import RouteForm, RouteCreateForm
 from .models import Route
-from .route import SessionRoute
 from ..trains.models import Train
+from typing import List
 
 
 def home(request):
@@ -45,26 +45,29 @@ def find_routes(request):
             for route in right_ways:
                 tmp = {'trains': []}
                 total_time = 0
-                for i in range(len(route) - 1):
-                    qs = Train.objects.filter(from_city=route[i], to_city=route[i + 1])
+                for i in range(len(route)-1):
+                    qs = Train.objects.filter(from_city=route[i], to_city=route[i+1])
                     qs = qs.order_by('travel_time').first()
                     total_time += qs.travel_time
                     tmp['trains'].append(qs)
                 tmp['total_time'] = total_time
                 if total_time <= int(travel_time):
-                    tmp['from_city'] = from_city
-                    tmp['to_city'] = to_city
                     trains.append(tmp)
             if not trains:
                 messages.error(request, 'Время в пути больше заданного')
                 return render(request, 'routes/home.html', {'form': form})
-            trains = sorted(trains, key=lambda x: x['total_time'])
-            routes = SessionRoute(request)
-            routes.clear()  # очищаем сессию перед новым добавлением
-            routes.add(trains)
 
+            routes = []
             cities = {'from_city': from_city.name, 'to_city': to_city.name}  # города, будем рендерить в шаблоне
-            context = {'form': RouteForm(), 'routes': routes, 'cities': cities}
+            for train in trains:
+                routes.append({
+                    'route': train['trains'],
+                    'total_time': train['total_time'],
+                    'from_city': from_city.name,
+                    'to_city': to_city.name
+                })
+            sorted_routes = sorted(routes, key=lambda x: x['total_time'])
+            context = {'form': RouteForm(), 'routes': sorted_routes, 'cities': cities}
             return render(request, 'routes/home.html', context)
         return render(request, 'routes/home.html', {'form': form})
     else:
@@ -73,33 +76,52 @@ def find_routes(request):
         return render(request, 'routes/home.html', {'form': form})
 
 
-def save_route(request, route_id):
+def save_route(request):
+    """Сохранение маршрута в модели"""
     if request.method == 'POST':
         form = RouteCreateForm(request.POST)
         if form.is_valid():
-            form_data = form.cleaned_data
-            print(route_id)
-            name = form_data['name']
-            route = SessionRoute(request)
-            data = route.get_route(route_id)
-            route = Route(
-                name=name,
-                from_city=data['from_city'],
-                to_city=data['to_city'],
-                travel_time=data['total_time'])
+            data = form.cleaned_data
+            name = data['name']
+            total_time = data['travel_time']
+            from_city: str = data['from_city']
+            to_city: str = data['to_city']
+            across_cities: List[str] = data['across_cities'].split()
+            trains_id = [int(i) for i in across_cities if i.isalnum()]
+            qs = Train.objects.filter(id__in=trains_id)
+            route = Route(name=name, from_city=from_city, to_city=to_city, travel_time=total_time)
             route.save()
-            for train in data['trains']:
-                route.across_cities.add(train.id)
+            for tr in qs:
+                route.across_cities.add(tr.id)
             messages.error(request, 'Маршрут сохранен')
             return HttpResponseRedirect('/')
         else:
             assert False
     else:
-        route = SessionRoute(request)
-        data = route.get_route(route_id)
+        data = request.GET
         if data:
-            form = RouteCreateForm()
-            context = {'form': form, 'route': data}
+            total_time = data['total_time']
+            from_city: str = data['from_city']
+            to_city: str = data['to_city']
+            across_cities: List[str] = data['across_cities'].split()
+            trains_id = [int(i) for i in across_cities if i.isalnum()]
+            qs = Train.objects.filter(id__in=trains_id)
+            train_list = ' '.join(str(i) for i in trains_id)
+            form = RouteCreateForm(initial={'from_city': from_city,
+                                            'to_city': to_city,
+                                            'travel_time': total_time,
+                                            'across_cities': train_list
+                                            })
+            route_desc = []
+            for train in qs:
+                desc = f'Поезд № {train.name} следующий из г. {train.from_city} в г. {train.to_city}. ' \
+                        f'Время в пути {train.travel_time} ч.'
+                route_desc.append(desc)
+            context = {'form': form,
+                       'route_desc': route_desc,
+                       'from_city': from_city,
+                       'to_city': to_city,
+                       'total_time': total_time}
             return render(request, 'routes/create.html', context)
         else:
             messages.error(request, 'Невозможно сохранить несуществующий маршрут')
@@ -121,3 +143,4 @@ class RouteListView(ListView):
 class RouteDeleteView(DeleteView):
     model = Route
     success_url = reverse_lazy('routes:home')
+

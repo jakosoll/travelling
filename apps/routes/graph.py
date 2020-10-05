@@ -27,12 +27,3 @@ def get_graph():
         tmp = set(i['to_city'] for i in trains)
         graph[city] = tmp
     return graph
-
-
-def handle_form_data_and_get_all_ways(data):
-    from_city = data['from_city']
-    to_city = data['to_city']
-    across_cities_form = data['across_cities']
-    travel_time = data['travel_time']  # раскладываем данные в переменные
-    graph = get_graph()  # получаем граф маршрутов
-    all_ways = list(dfs_paths(graph, from_city.id, to_city.id))
