@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Маршруты{% endblock title %}
+{% block content %}
+    <div class="container my-4">
+        <h1 class="text-center my-4">Список маршрутов</h1>
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <table class="table">
+                    <thead class="thead-dark rounded">
+                    <tr>
+                        <th scope="col">Название маршрута</th>
+                        <th scope="col">Откуда</th>
+                        <th scope="col">Куда</th>
+                        <th scope="col">Время в пути</th>
+                        <th scope="col">Через</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">{{ route.name }}</th>
+                            <th>{{ route.from_city }}</th>
+                            <th>{{ route.to_city }}</th>
+                            <th>{{ route.travel_time }} ч.</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

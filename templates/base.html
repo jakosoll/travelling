@@ -1,6 +1,6 @@
 {% url 'cities:home' as cities_home %}
 {% url 'trains:home' as trains_home %}
-{% url 'routes:home' as routes_home %}
+{% url 'routes:list' as routes_list %}
 <!doctype html>
 <html lang="ru">
 <head>
@@ -16,15 +16,15 @@
 <body>
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
-        <a class="navbar-brand" href="#">Traveliing by Krivenko E.</a>
+        <a class="navbar-brand" href="{% url 'routes:home' %}">Маршруты by Krivenko E.</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item {% if request.path == routes_home %} active {% endif %}">
-                    <a class="nav-link" href="{% url 'routes:home' %}">Маршруты</a>
+                <li class="nav-item {% if request.path == routes_list %} active {% endif %}">
+                    <a class="nav-link" href="{% url 'routes:list' %}">Маршруты</a>
                 </li>
                 <li class="nav-item {% if request.path == cities_home %} active {% endif %}">
                     <a class="nav-link" href="{% url 'cities:home' %}">Города <span class="sr-only">(current)</span></a>
@@ -35,12 +35,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Дополнительно
+                        Добавление
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{% url 'cities:add' %}">Добавить город</a>
                         <a class="dropdown-item" href="{% url 'trains:add' %}">Добавить поезд</a>
-                        <a class="dropdown-item" href="#">Добавить маршрут</a>
                     </div>
                 </li>
             </ul>

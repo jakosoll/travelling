@@ -35,7 +35,6 @@ class CityUpdateView(SuccessMessageMixin, UpdateView):
     
 class CityDeleteView(SuccessMessageMixin, DeleteView):
     model = City
-    form_class = CityForm
     template_name = 'cities/delete.html'
     success_url = reverse_lazy('cities:home')
 
