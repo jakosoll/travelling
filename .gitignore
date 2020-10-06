@@ -4,3 +4,4 @@
 .DS_Store
 *.pyc
 *.egg-info
+/travelling/settings/local.py
