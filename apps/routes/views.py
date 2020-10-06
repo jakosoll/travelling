@@ -121,5 +121,6 @@ class RouteListView(ListView):
 class RouteDeleteView(LoginRequiredMixin, DeleteView):
     model = Route
     login_url = '/login/'
+    template_name = 'routes/delete.html'
     success_url = reverse_lazy('routes:home')
 
