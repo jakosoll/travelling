@@ -5,3 +5,4 @@
 *.pyc
 *.egg-info
 /travelling/settings/local.py
+/travelling/settings/.env
