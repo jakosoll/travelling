@@ -97,4 +97,4 @@ class RoutesTestCase(TestCase):
     def test_find_routes_messages_across_cities_error(self):
         response = self.client.post('/find/', {'from_city': self.city_B.id, 'to_city': self.city_E.id,
                                                'across_cities': [self.city_C.id], 'travel_time': 20})
-        self.assertContains(response, 'Маршрут, через эти города невозможен', 1, 200)
+        self.assertContains(response, 'Маршрут через эти города невозможен', 1, 200)
