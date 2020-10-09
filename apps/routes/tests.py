@@ -75,19 +75,28 @@ class RoutesTestCase(TestCase):
         all_ways = list(gp.dfs_paths(self.graph, self.city_A.id, self.city_E.id))
         self.assertEqual(len(all_ways), 4)
 
-    def session_route(self):
-        self.client.get(reverse('routes:home'))
-        route = SessionRoute(self.client)
-        all_ways = gp.dfs_paths(self.graph, self.city_A.id, self.city_E.id)
-        route.add(gp.dfs_paths(self.graph, self.city_A.id, self.city_E.id))
-        routes = [r for r in route]
-        self.assertEqual(len(routes), 4)
-
     def test_form_is_valid(self):
         form_data = {'from_city': self.city_A.id, 'to_city': self.city_E.id,
                      'across_cities': [self.city_C.id], 'travel_time': 30}
         form = RouteForm(form_data)
         self.assertTrue(form.is_valid())
+
+    def test_order_trains_in_route(self):
+        self.client.get(reverse('routes:home'))
+        request = self.client
+        form_data = {'from_city': self.city_A.id, 'to_city': self.city_E.id,
+                     'across_cities': [self.city_C.id, self.city_D.id], 'travel_time': 30}
+        form = RouteForm(form_data)
+        form.is_valid()
+        data = form.cleaned_data
+        trains = data['trains']
+        SessionRoute(request).clear()
+        routes = SessionRoute(request)
+        routes.add(trains)
+        lst = []
+        for route in routes:
+            lst.extend([i.from_city.name for i in route['trains']])
+        self.assertEqual(lst, ['A', 'C', 'B', 'D'])
 
     def test_find_routes_messages_time_error(self):
         response = self.client.post('/find/', {'from_city': self.city_A.id, 'to_city': self.city_E.id,

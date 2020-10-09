@@ -70,8 +70,7 @@ class DivErrorList(ErrorList):
         if not self:
             return ''
         return '<div class="alert alert-secondary" role="alert">' \
-               '<h5 class="text-center">Не удалось ничего найти:</h5>%s</div>' % ''.join(
-            ['<p class="text-center">%s<p>' % e for e in self])
+               '<h5 class="text-center">Не удалось ничего найти:</h5>%s</div>' % ''.join(['<p class="text-center">%s<p>' % e for e in self])
 
 
 class RouteCreateForm(forms.ModelForm):

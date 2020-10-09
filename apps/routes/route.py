@@ -2,6 +2,7 @@ import copy
 from django.conf import settings
 from apps.cities.models import City
 from apps.trains.models import Train
+from django.db.models import Case, When
 
 
 class SessionRoute:
@@ -36,12 +37,14 @@ class SessionRoute:
         return route
 
     def __iter__(self):
+        """preserved helps save order in qs"""
         routes = copy.deepcopy(self.routes)
         for key, route in routes.items():
             trains_id = [i for i in route['trains']]
             from_city_id = route['from_city']
             to_city_id = route['to_city']
-            trains = Train.objects.filter(id__in=trains_id)
+            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(trains_id)])
+            trains = Train.objects.filter(id__in=trains_id).order_by(preserved)
             route['id'] = int(key)
             route['trains'] = [train for train in trains]
             route['from_city'] = City.objects.get(pk=from_city_id)
@@ -54,6 +57,8 @@ class SessionRoute:
     def clear(self):
         del self.session[settings.ROUTE_SESSION_ID]
         self.session.modified = True
+        # self.save()
+        # print(self.session[settings.ROUTE_SESSION_ID])
 
     def save(self):
         """Сохранение корзины в сессии"""
