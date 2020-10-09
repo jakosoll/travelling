@@ -22,9 +22,8 @@ def find_routes(request):
             from_city = data['from_city']
             to_city = data['to_city']
             trains = data['trains']
-            trains = sorted(trains, key=lambda x: x['total_time'])
+            SessionRoute(request).clear()
             routes = SessionRoute(request)
-            routes.clear()  # очищаем сессию перед новым добавлением
             routes.add(trains)
 
             cities = {'from_city': from_city.name, 'to_city': to_city.name}
